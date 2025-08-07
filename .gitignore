@@ -1,0 +1,33 @@
+# Gradle
+.gradle
+build
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# Idea
+.idea/
+out/
+*.ipr
+*.iws
+*.iml
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# VSC
+.vscode/
+
+# OSX
+.DS_Store
+
+# Program
+/start.bat
+/start.sh
+/build.bat
+/build.sh

@@ -2,7 +2,7 @@ package me.spencernold.kwaf.handlers
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
-import edu.csus.recipedb.framework.logger.Logger
+import me.spencernold.kwaf.logger.Logger
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream

@@ -1,6 +1,6 @@
 package me.spencernold.kwaf.translator
 
-import edu.csus.recipedb.framework.logger.Logger
+import me.spencernold.kwaf.logger.Logger
 import java.util.regex.Pattern
 
 class SystemPropertyTranslator: Translator<String, String?> {

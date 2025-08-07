@@ -1,7 +1,7 @@
 package me.spencernold.kwaf.services
 
-import edu.csus.recipedb.framework.WebServer
-import edu.csus.recipedb.framework.annotation.Instantiated
+import me.spencernold.kwaf.WebServer
+import me.spencernold.kwaf.annotation.Instantiated
 
 abstract class Implementation {
 

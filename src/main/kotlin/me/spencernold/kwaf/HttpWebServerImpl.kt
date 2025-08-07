@@ -2,8 +2,8 @@ package me.spencernold.kwaf
 
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
-import edu.csus.recipedb.framework.handlers.Handler
-import edu.csus.recipedb.framework.logger.Logger
+import me.spencernold.kwaf.handlers.Handler
+import me.spencernold.kwaf.logger.Logger
 import java.net.InetSocketAddress
 import java.util.concurrent.ExecutorService
 

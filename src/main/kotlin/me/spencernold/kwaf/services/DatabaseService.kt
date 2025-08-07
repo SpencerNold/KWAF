@@ -1,8 +1,8 @@
 package me.spencernold.kwaf.services
 
-import edu.csus.recipedb.framework.WebServer
-import edu.csus.recipedb.framework.database.Driver
-import edu.csus.recipedb.framework.translator.SystemPropertyTranslator
+import me.spencernold.kwaf.WebServer
+import me.spencernold.kwaf.database.Driver
+import me.spencernold.kwaf.translator.SystemPropertyTranslator
 
 class DatabaseService(clazz: Class<*>, private val database: Database): Service(Type.DATABASE, clazz) {
 
@@ -23,14 +23,14 @@ class DatabaseService(clazz: Class<*>, private val database: Database): Service(
             return null
         }
         implement(instance, server)
-        if (instance !is edu.csus.recipedb.framework.database.Database) {
+        if (instance !is me.spencernold.kwaf.database.Database) {
             logger.error("${clazz.name} must implement the Database class in order to be registered as a service")
         }
         val driver = Driver.Factory(database.driver).create(url, username, password)
-        val field = edu.csus.recipedb.framework.database.Database::class.java.getDeclaredField("driver")
+        val field = me.spencernold.kwaf.database.Database::class.java.getDeclaredField("driver")
         field.isAccessible = true
         field.set(instance, driver)
-        (instance as edu.csus.recipedb.framework.database.Database).open()
+        (instance as me.spencernold.kwaf.database.Database).open()
         return instance
     }
 }

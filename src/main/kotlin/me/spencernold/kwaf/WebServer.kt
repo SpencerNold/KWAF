@@ -1,10 +1,10 @@
 package me.spencernold.kwaf
 
-import edu.csus.recipedb.framework.handlers.Handler
-import edu.csus.recipedb.framework.logger.Logger
-import edu.csus.recipedb.framework.services.ControllerService
-import edu.csus.recipedb.framework.services.DatabaseService
-import edu.csus.recipedb.framework.services.Service
+import me.spencernold.kwaf.handlers.Handler
+import me.spencernold.kwaf.logger.Logger
+import me.spencernold.kwaf.services.ControllerService
+import me.spencernold.kwaf.services.DatabaseService
+import me.spencernold.kwaf.services.Service
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

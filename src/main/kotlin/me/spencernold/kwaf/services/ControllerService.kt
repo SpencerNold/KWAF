@@ -1,9 +1,9 @@
 package me.spencernold.kwaf.services
 
-import edu.csus.recipedb.framework.Route
-import edu.csus.recipedb.framework.WebServer
-import edu.csus.recipedb.framework.handlers.GenericHttpHandler
-import edu.csus.recipedb.framework.handlers.StaticFileHttpHandler
+import me.spencernold.kwaf.Route
+import me.spencernold.kwaf.WebServer
+import me.spencernold.kwaf.handlers.GenericHttpHandler
+import me.spencernold.kwaf.handlers.StaticFileHttpHandler
 
 class ControllerService(clazz: Class<*>, private val controller: Controller): Service(Type.CONTROLLER, clazz) {
 

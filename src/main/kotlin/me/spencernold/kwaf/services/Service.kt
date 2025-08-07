@@ -1,8 +1,8 @@
 package me.spencernold.kwaf.services
 
-import edu.csus.recipedb.framework.WebServer
-import edu.csus.recipedb.framework.database.Driver
-import edu.csus.recipedb.framework.logger.Logger
+import me.spencernold.kwaf.WebServer
+import me.spencernold.kwaf.database.Driver
+import me.spencernold.kwaf.logger.Logger
 
 abstract class Service(protected val type: Type, protected val clazz: Class<*>) {
 

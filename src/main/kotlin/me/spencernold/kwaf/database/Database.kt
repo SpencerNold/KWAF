@@ -1,6 +1,6 @@
 package me.spencernold.kwaf.database
 
-import edu.csus.recipedb.framework.annotation.Instantiated
+import me.spencernold.kwaf.annotation.Instantiated
 
 abstract class Database {
 

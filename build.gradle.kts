@@ -12,12 +12,12 @@ repositories {
 
 kotlin {
 	jvmToolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
+		languageVersion.set(JavaLanguageVersion.of(11))
 	}
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-	compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+	compilerOptions.jvmTarget.set(JvmTarget.JVM_11)
 }
 
 dependencies {

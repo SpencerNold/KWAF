@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
 	kotlin("jvm") version "2.2.0"
 }
@@ -10,6 +14,10 @@ kotlin {
 	jvmToolchain {
 		languageVersion.set(JavaLanguageVersion.of(17))
 	}
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+	compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
 }
 
 dependencies {

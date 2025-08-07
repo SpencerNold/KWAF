@@ -1,1 +1,1 @@
-rootProject.name = "recipedb"
+rootProject.name = "KWAF"

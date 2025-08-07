@@ -2,6 +2,7 @@ package me.spencernold.kwaf.http
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import me.spencernold.kwaf.InputStreams
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -41,7 +42,7 @@ class HttpClient {
         val body = if (code == 204 || connection.contentLength == 0) {
             ByteArray(0)
         } else {
-            connection.inputStream.readAllBytes()
+            InputStreams.readAllBytes(connection.inputStream)
         }
         return HttpResponse(code, body)
     }

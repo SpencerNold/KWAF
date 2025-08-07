@@ -1,9 +1,8 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "2.2.0"
+	kotlin("jvm") version "1.9.20"
 }
 
 repositories {
@@ -12,12 +11,12 @@ repositories {
 
 kotlin {
 	jvmToolchain {
-		languageVersion.set(JavaLanguageVersion.of(11))
+		languageVersion.set(JavaLanguageVersion.of(8))
 	}
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-	compilerOptions.jvmTarget.set(JvmTarget.JVM_11)
+	compilerOptions.jvmTarget.set(JvmTarget.JVM_1_8)
 }
 
 dependencies {

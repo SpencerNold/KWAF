@@ -2,6 +2,7 @@ package me.spencernold.kwaf.handlers
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
+import me.spencernold.kwaf.InputStreams
 import me.spencernold.kwaf.logger.Logger
 import java.io.File
 import java.io.FileInputStream
@@ -20,7 +21,7 @@ class StaticFileHttpHandler(private val bytes: ByteArray): Handler(), HttpHandle
                 if (response != null) {
                     val input = if (response is File?) { FileInputStream(response) } else if (response is InputStream?) { response } else { null }
                     if (input != null)
-                        input.readAllBytes()
+                        InputStreams.readAllBytes(input)
                     else {
                         logger.error("${method.name} in ${instance.javaClass.name} must return an InputStream or a File to be used as a static file handler")
                         ByteArray(0)

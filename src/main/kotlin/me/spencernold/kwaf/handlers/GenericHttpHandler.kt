@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
+import me.spencernold.kwaf.InputStreams
 import me.spencernold.kwaf.Route
 import me.spencernold.kwaf.exceptions.HandlerException
 import me.spencernold.kwaf.http.HttpRequest
@@ -17,7 +18,7 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
 
     override fun handle(exchange: HttpExchange) {
         if (exchange.requestMethod == route.method.name) {
-            val body = exchange.requestBody.readAllBytes()
+            val body = InputStreams.readAllBytes(exchange.requestBody)
             if (body.isEmpty() == route.input) {
                 exchange.sendResponseHeaders(400, -1)
                 return

@@ -25,9 +25,3 @@ out/
 
 # OSX
 .DS_Store
-
-# Program
-/start.bat
-/start.sh
-/build.bat
-/build.sh

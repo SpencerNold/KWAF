@@ -2,7 +2,7 @@ package me.spencernold.kwaf.http
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import me.spencernold.kwaf.InputStreams
+import me.spencernold.kwaf.util.InputStreams
 import java.net.HttpURLConnection
 import java.net.URL
 

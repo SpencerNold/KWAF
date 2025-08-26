@@ -4,11 +4,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
-import me.spencernold.kwaf.InputStreams
 import me.spencernold.kwaf.Route
 import me.spencernold.kwaf.exceptions.HandlerException
 import me.spencernold.kwaf.http.HttpRequest
 import me.spencernold.kwaf.http.HttpResponse
+import me.spencernold.kwaf.util.InputStreams
 import java.lang.reflect.Method
 import java.nio.charset.StandardCharsets
 

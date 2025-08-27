@@ -8,6 +8,8 @@ import java.util.concurrent.Executors
 
 @Service.Controller
 class BasicController {
+
+    // Returns /resources/basic_example.html
     @Route.File(path = "/")
     fun root(): InputStream? {
         return Resource.get("basic_example.html")

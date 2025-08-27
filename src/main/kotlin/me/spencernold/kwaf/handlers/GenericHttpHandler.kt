@@ -14,9 +14,8 @@ import java.nio.charset.StandardCharsets
 
 class GenericHttpHandler(private val route: Route, private val instance: Any, private val method: Method): Handler(), HttpHandler {
 
-    private val gson: Gson = GsonBuilder().create()
-
     override fun handle(exchange: HttpExchange) {
+        val encoder = route.encoding.getEncoder()
         if (exchange.requestMethod == route.method.name) {
             val body = InputStreams.readAllBytes(exchange.requestBody)
             if (body.isEmpty() == route.input) {
@@ -45,7 +44,7 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                     }
                     HttpRequest(route.method, uri[0], parameters, headers, body)
                 } else {
-                    gson.fromJson(String(body), parameter.type)
+                    if (encoder == null) String(body) else encoder.decode(String(body), parameter.type)
                 }
                 method.invoke(instance, argument)
             } else {
@@ -55,7 +54,7 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                 exchange.sendResponseHeaders(204, -1)
                 return
             }
-            val bytes = if (response is HttpResponse) { response.body } else { gson.toJson(response).toByteArray(charset = StandardCharsets.UTF_8) }
+            val bytes = if (response is HttpResponse) { response.body } else { (encoder?.encode(response)?.toByteArray() ?: response.toString().toByteArray()) }
             if (bytes.isEmpty()) {
                 exchange.sendResponseHeaders(if (response is HttpResponse) { response.code } else { 204 }, -1)
                 return

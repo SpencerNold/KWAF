@@ -7,6 +7,7 @@ KWAF is meant to be a lightweight replacement for Springboot. It is currently en
 The main benefit intended by KWAf is to remove the bloat of other frameworks with an easy to learn syntax. KWAF effectively prevents misconfigurations by only shipping with the necessary tools to get started. There's no point in being vulnerable from features you don't even want to use!
 <hr>
 <h2>Getting Started</h2>
+* Examples can be found in <a href="https://github.com/SpencerNold/KWAF/tree/main/src/examples">src/examples</a>
 <hr>
 KWAF uses Jitpack for maven and gradle and can be found at the following site:
 <a href="https://jitpack.io/#SpencerNold/KWAF">KWAF JitPack</a>

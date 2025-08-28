@@ -22,6 +22,34 @@ dependencies {
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 
+subprojects {
+	tasks.register("genJavaKeyStore") {
+		doLast {
+			TODO("Implement!")
+
+			// keytool to generate .jks
+			// keytool -genkeypair -alias ALIAS -keyalg RSA -keysize 4096 keystore.jks -validity 365
+			// ALIAS needs to be consistent between commands, validity will follow CA's validity
+
+			// .jks to .csr for CA to sign
+			// keytool -certreg -alias ALIAS -file keystore.csr -keystore keystore.jks
+
+			// send .csr to CA
+
+			// .crt into .jks
+			// keytool -importcert -trustcacerts -alias digicertroot -file DigiCertRoot.crt -keystore keystore.jks
+			// keytool -importcert -trustcacerts -alias digicertintermediate -file DigiCertIntermediate.crt -keystore keystore.jks
+			// keytool -importcert -alias ALIAS -file keystore.crt -keystore keystore.jks
+		}
+	}
+
+	tasks.register("genSiteMap") {
+		doLast {
+			TODO("Implement!")
+		}
+	}
+}
+
 sourceSets {
 	create("examples") {
 		kotlin.srcDir("src/examples/kotlin")
@@ -45,7 +73,7 @@ tasks.test {
 
 tasks.register<JavaExec>("runExample") {
 	classpath = sourceSets["examples"].runtimeClasspath
-	mainClass.set("NonFileObjectControllerExampleKt") // <- change to your entrypoint
+	mainClass.set("HttpsExampleKt") // <- change to the entrypoint of the example you want to run
 }
 
 tasks.named<Copy>("processExamplesResources") {

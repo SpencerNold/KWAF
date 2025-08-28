@@ -1,6 +1,8 @@
 package me.spencernold.kwaf
 
 import me.spencernold.kwaf.handlers.Handler
+import me.spencernold.kwaf.impl.HttpWebServerImpl
+import me.spencernold.kwaf.impl.HttpsWebServerImpl
 import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.services.ControllerService
 import me.spencernold.kwaf.services.DatabaseService
@@ -93,7 +95,11 @@ abstract class WebServer(val port: Int) {
 
         fun create(): WebServer {
             val server = when (builder.protocol) {
-                Protocol.HTTP -> me.spencernold.kwaf.HttpWebServerImpl(
+                Protocol.HTTP -> HttpWebServerImpl(
+                    builder.port,
+                    builder.executor ?: Executors.newSingleThreadExecutor()
+                )
+                Protocol.HTTPS -> HttpsWebServerImpl(
                     builder.port,
                     builder.executor ?: Executors.newSingleThreadExecutor()
                 )

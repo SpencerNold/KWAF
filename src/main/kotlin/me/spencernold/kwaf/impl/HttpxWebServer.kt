@@ -1,19 +1,21 @@
-package me.spencernold.kwaf
+package me.spencernold.kwaf.impl
 
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
+import com.sun.net.httpserver.HttpsServer
+import me.spencernold.kwaf.WebServer
 import me.spencernold.kwaf.handlers.Handler
 import me.spencernold.kwaf.logger.Logger
 import java.net.InetSocketAddress
 import java.util.concurrent.ExecutorService
 
-class HttpWebServerImpl(port: Int, private val executor: ExecutorService): me.spencernold.kwaf.WebServer(port) {
+abstract class HttpxWebServer(port: Int, private val executor: ExecutorService, secure: Boolean) : WebServer(port) {
 
     private val logger: Logger = Logger.getSystemLogger()
-    private val server: HttpServer = HttpServer.create(InetSocketAddress(port), 0)
     private val handlers: MutableMap<String, Handler> = mutableMapOf()
     private val services: MutableMap<Class<*>, Any> = mutableMapOf()
     private var running: Boolean = false
+    protected var server: HttpServer = if (secure) HttpsServer.create(InetSocketAddress(port), 0) else HttpServer.create(InetSocketAddress(port), 0)
 
     override fun start() {
         if (running)
@@ -30,10 +32,6 @@ class HttpWebServerImpl(port: Int, private val executor: ExecutorService): me.sp
         running = false
         logger.info("Shutting down server...")
         server.stop(0)
-    }
-
-    override fun reload() {
-        TODO("Not implemented yet!")
     }
 
     override fun addHandler(path: String, handler: Handler) {

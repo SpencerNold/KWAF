@@ -42,3 +42,12 @@ tasks.test {
 		showStandardStreams = true
 	}
 }
+
+tasks.register<JavaExec>("runExample") {
+	classpath = sourceSets["examples"].runtimeClasspath
+	mainClass.set("NonFileObjectControllerExampleKt") // <- change to your entrypoint
+}
+
+tasks.named<Copy>("processExamplesResources") {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

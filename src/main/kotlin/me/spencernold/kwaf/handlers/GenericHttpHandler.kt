@@ -21,8 +21,7 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
             }
             val encoder = route.encoding.getEncoder()
             val response: Any?
-            val param0 = method.parameters[0]
-            if (param0.type == HttpRequest::class.java && method.parameters.size == 1) {
+            if (method.parameters.size == 1 && method.parameters[0].type == HttpRequest::class.java) {
                 val uri = exchange.requestURI
                 val parameters = mutableMapOf<String, String>()
                 val values = uri.query.split("&")
@@ -36,7 +35,7 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                 val request = HttpRequest(route.method, uri.path, parameters, headers, body)
                 response = method.invoke(instance, request)
             } else if (route.input && method.parameters.size == 1) {
-                response = encoder?.decode(String(body), param0.type) ?: String(body)
+                response = encoder?.decode(String(body), method.parameters[0].type) ?: String(body)
             } else {
                 if (method.parameters.isNotEmpty())
                     throw HandlerException("@Route is not expecting input, but parameters to the ${method.name} exist")

@@ -64,4 +64,14 @@ abstract class HttpxWebServer(port: Int, private val executor: ExecutorService, 
             clazz.cast(service)
         }
     }
+
+    override fun <T : Annotation> getServicesFromType(clazz: Class<T>): Array<Class<*>> {
+        val services = services.keys
+        val list = mutableListOf<Class<*>>()
+        for (service in services) {
+            if (service.isAnnotationPresent(clazz))
+                list.add(service)
+        }
+        return list.toTypedArray()
+    }
 }

@@ -7,6 +7,7 @@ import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.services.ControllerService
 import me.spencernold.kwaf.services.DatabaseService
 import me.spencernold.kwaf.services.Service
+import me.spencernold.kwaf.sitemap.MapGeneratorTool
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -54,6 +55,8 @@ abstract class WebServer(val port: Int) {
      */
     abstract fun <T> service(clazz: Class<T>): T?
 
+    abstract fun <T : Annotation> getServicesFromType(clazz: Class<T>): Array<Class<*>>
+
     /**
      * Part of the Builder design pattern, used to create an instance of a web server.
      *
@@ -65,6 +68,7 @@ abstract class WebServer(val port: Int) {
         val port: Int,
         var services: Array<Class<*>> = arrayOf(),
         var executor: ExecutorService? = null,
+        var siteMap: Boolean = false,
     ) {
 
         /**
@@ -80,6 +84,8 @@ abstract class WebServer(val port: Int) {
          * @param executor executor instance to be used by the server
          */
         fun executor(executor: ExecutorService) = apply { this.executor = executor }
+
+        fun sitemap() = apply { this.siteMap = true }
 
         /**
          * Builds the web server. Services are initialized by this method.
@@ -119,6 +125,10 @@ abstract class WebServer(val port: Int) {
                 }
                 if (instance != null)
                     server.register(instance)
+            }
+            if (builder.siteMap) {
+                MapGeneratorTool.generateMapXML(server)
+                MapGeneratorTool.generateRobots(server)
             }
             return server
         }

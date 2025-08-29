@@ -24,7 +24,7 @@ abstract class Service(protected val type: Type, protected val clazz: Class<*>) 
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.CLASS)
-    annotation class Controller(val path: String = "")
+    annotation class Controller(val path: String = "", val domain: String = "", val domainPriority: Boolean = false)
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.CLASS)

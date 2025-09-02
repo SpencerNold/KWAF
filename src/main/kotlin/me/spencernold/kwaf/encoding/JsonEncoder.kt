@@ -13,4 +13,8 @@ class JsonEncoder : Encoder {
     override fun <T> decode(str: String, type: Class<T>): T {
         return gson.fromJson(str, type)
     }
+
+    override fun getContentType(): String {
+        return "application/json; charset=utf-8"
+    }
 }

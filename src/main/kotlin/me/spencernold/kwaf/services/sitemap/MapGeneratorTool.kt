@@ -1,4 +1,4 @@
-package me.spencernold.kwaf.sitemap
+package me.spencernold.kwaf.services.sitemap
 
 import me.spencernold.kwaf.Route
 import me.spencernold.kwaf.WebServer

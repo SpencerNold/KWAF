@@ -56,6 +56,7 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                 if (bytes.isEmpty())
                     exchange.sendResponseHeaders(204, -1)
                 else {
+                    exchange.responseHeaders.set("Content-Type", encoder?.getContentType() ?: "text/plain;")
                     exchange.sendResponseHeaders(200, bytes.size.toLong())
                     exchange.responseBody.write(bytes)
                 }

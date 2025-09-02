@@ -1,6 +1,6 @@
 import me.spencernold.kwaf.*
 import me.spencernold.kwaf.services.Service
-import me.spencernold.kwaf.sitemap.Sitemap
+import me.spencernold.kwaf.services.sitemap.Sitemap
 import java.io.InputStream
 import java.util.concurrent.Executors
 

@@ -7,7 +7,7 @@ import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.services.ControllerService
 import me.spencernold.kwaf.services.DatabaseService
 import me.spencernold.kwaf.services.Service
-import me.spencernold.kwaf.sitemap.MapGeneratorTool
+import me.spencernold.kwaf.services.sitemap.MapGeneratorTool
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

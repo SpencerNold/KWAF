@@ -35,7 +35,8 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                 val request = HttpRequest(route.method, uri.path, parameters, headers, body)
                 response = method.invoke(instance, request)
             } else if (route.input && method.parameters.size == 1) {
-                response = encoder?.decode(String(body), method.parameters[0].type) ?: String(body)
+                val request = encoder?.decode(String(body), method.parameters[0].type) ?: String(body)
+                response = method.invoke(instance, request)
             } else {
                 if (method.parameters.isNotEmpty())
                     throw HandlerException("@Route is not expecting input, but parameters to the ${method.name} exist")

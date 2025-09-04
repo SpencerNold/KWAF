@@ -45,7 +45,7 @@ tasks.test {
 
 tasks.register<JavaExec>("runExample") {
 	classpath = sourceSets["examples"].runtimeClasspath
-	mainClass.set("SiteMapExampleKt") // <- change to the entrypoint of the example you want to run
+	mainClass.set("BasicControllerExampleKt") // <- change to the entrypoint of the example you want to run
 }
 
 tasks.named<Copy>("processExamplesResources") {

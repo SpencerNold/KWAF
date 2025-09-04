@@ -1,7 +1,4 @@
-import me.spencernold.kwaf.Protocol
-import me.spencernold.kwaf.Resource
-import me.spencernold.kwaf.Route
-import me.spencernold.kwaf.WebServer
+import me.spencernold.kwaf.*
 import me.spencernold.kwaf.services.Service
 import java.io.InputStream
 import java.util.concurrent.Executors
@@ -13,6 +10,11 @@ class BasicController {
     @Route.File(path = "/")
     fun root(): InputStream? {
         return Resource.get("basic_example.html")
+    }
+
+    @Route(method = Http.Method.GET, path = "/test")
+    fun test(): String {
+        return "test"
     }
 }
 

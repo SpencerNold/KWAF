@@ -47,6 +47,7 @@ class StaticFileHttpHandler(private val bytes: ByteArray): Handler(), HttpHandle
             output.close()
         } else {
             exchange.sendResponseHeaders(400, -1)
+            exchange.responseBody.close()
         }
     }
 }

@@ -44,13 +44,16 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
             // Response Handling
             if (response == null) {
                 exchange.sendResponseHeaders(204, -1)
+                exchange.responseBody.close()
                 return
             }
             if (response is HttpResponse) {
                 val bytes = response.body
                 exchange.sendResponseHeaders(response.code, if (bytes.isEmpty() && response.code == 204) -1 else bytes.size.toLong())
-                if (bytes.isNotEmpty())
+                if (bytes.isNotEmpty()) {
                     exchange.responseBody.write(bytes)
+                    exchange.responseBody.flush()
+                }
             } else {
                 val bytes = (encoder?.encode(response)?.toByteArray() ?: response.toString().toByteArray())
                 if (bytes.isEmpty())
@@ -59,10 +62,12 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                     exchange.responseHeaders.set("Content-Type", encoder?.getContentType() ?: "text/plain;")
                     exchange.sendResponseHeaders(200, bytes.size.toLong())
                     exchange.responseBody.write(bytes)
+                    exchange.responseBody.flush()
                 }
             }
         } else {
             exchange.sendResponseHeaders(400, -1)
         }
+        exchange.responseBody.close()
     }
 }

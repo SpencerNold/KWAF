@@ -7,6 +7,13 @@
 <body>
 
 This is just a simple example HTML file to demonstrate the features of KWAF.
-
+<script>
+    const xhr = new XMLHttpRequest()
+    xhr.open("GET", `/test`)
+    xhr.onload = () => {
+        console.log(xhr.responseText)
+    }
+xhr.send()
+</script>
 </body>
 </html>

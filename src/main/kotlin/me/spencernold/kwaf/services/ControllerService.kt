@@ -25,9 +25,9 @@ class ControllerService(clazz: Class<*>, private val controller: Controller) : S
                 val route = method.getAnnotation(Route.File::class.java)
                 val path = controller.path + route.path
                 if (route.immutable) {
-                    server.addHandler(path, StaticFileHttpHandler.getHandler(instance, method))
+                    server.addHandler(path, StaticFileHttpHandler.getHandler(instance, method, route))
                 } else {
-                    server.addHandler(path, DynamicFileHttpHandler.getHandler(instance, method)!!)
+                    server.addHandler(path, DynamicFileHttpHandler.getHandler(instance, method, route)!!)
                 }
             }
         }

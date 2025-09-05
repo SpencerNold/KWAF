@@ -2,6 +2,7 @@ package me.spencernold.kwaf.handlers
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
+import me.spencernold.kwaf.Route
 import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.util.InputStreams
 import java.io.File
@@ -9,12 +10,12 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.lang.reflect.Method
 
-class StaticFileHttpHandler(private val bytes: ByteArray): Handler(), HttpHandler {
+class StaticFileHttpHandler(private val bytes: ByteArray, private val route: Route.File): FileHandler(), HttpHandler {
 
     companion object {
         private val logger = Logger.getSystemLogger()
 
-        fun getHandler(instance: Any, method: Method): StaticFileHttpHandler {
+        fun getHandler(instance: Any, method: Method, route: Route.File): StaticFileHttpHandler {
             val bytes = if (method.parameterCount == 0) {
                 method.isAccessible = true
                 val response = method.invoke(instance)
@@ -34,12 +35,15 @@ class StaticFileHttpHandler(private val bytes: ByteArray): Handler(), HttpHandle
                 logger.error("${method.name} in ${instance.javaClass.name} is invalid, static file handlers may not have input arguments")
                 ByteArray(0)
             }
-            return StaticFileHttpHandler(bytes)
+            return StaticFileHttpHandler(bytes, route)
         }
     }
 
     override fun handle(exchange: HttpExchange) {
         if (exchange.requestMethod == "GET") {
+            val headers = createResponseHeaders(route)
+            for (entry in headers)
+                exchange.responseHeaders.set(entry.key, entry.value)
             exchange.sendResponseHeaders(200, bytes.size.toLong())
             val output = exchange.responseBody
             output.write(bytes)

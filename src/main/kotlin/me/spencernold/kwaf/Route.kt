@@ -16,7 +16,7 @@ annotation class Route(
     @Target(AnnotationTarget.FUNCTION)
     annotation class File(
         val path: String,
-        val contentType: ContentType = ContentType.X_WWW_FORM_URLENCODED,
+        val contentType: ContentType = ContentType.NONE,
         val cacheControl: String = "",
         val immutable: Boolean = true
     )

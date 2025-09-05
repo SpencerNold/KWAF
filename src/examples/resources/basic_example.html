@@ -7,13 +7,25 @@
 <body>
 
 This is just a simple example HTML file to demonstrate the features of KWAF.
-<script>
-    const xhr = new XMLHttpRequest()
-    xhr.open("GET", `/test`)
-    xhr.onload = () => {
-        console.log(xhr.responseText)
+
+<button id="btn">Test</button>
+<script defer>
+    document.addEventListener("DOMContentLoaded", run)
+
+    function run() {
+        document.getElementById("btn").addEventListener("click", () => {
+        const xhr = new XMLHttpRequest()
+        xhr.open("POST", `/test`)
+        xhr.onload = () => {
+            console.log(xhr.responseText)
+        }
+        xhr.onerror = () => {
+            console.error("Network error")
+        }
+        const data = { name: "Test", value: 1 }
+        xhr.send(JSON.stringify(data))
+    })
     }
-xhr.send()
 </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+import com.google.gson.JsonObject
 import me.spencernold.kwaf.*
 import me.spencernold.kwaf.services.Service
 import java.io.InputStream
@@ -12,9 +13,10 @@ class BasicController {
         return Resource.get("basic_example.html")
     }
 
-    @Route(method = Http.Method.GET, path = "/test")
-    fun test(): String {
-        return "test"
+    @Route(method = Http.Method.POST, path = "/test", input = true)
+    fun test(obj: JsonObject): Int {
+        println("Bruh")
+        return 2
     }
 }
 

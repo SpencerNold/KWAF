@@ -65,19 +65,14 @@ class MapGeneratorTool {
         }
 
         private fun isRouteAvailable(method: Method): Boolean {
-            return method.isAnnotationPresent(Route::class.java) || method.isAnnotationPresent(Route.File::class.java) || method.isAnnotationPresent(
-                Route.Directory::class.java
-            )
+            return method.isAnnotationPresent(Route::class.java) || method.isAnnotationPresent(Route.File::class.java)
         }
 
         private fun getRoutePath(method: Method): String {
             return if (method.isAnnotationPresent(Route::class.java)) {
                 method.getAnnotation(Route::class.java).path
             } else {
-                if (method.isAnnotationPresent(Route.File::class.java))
-                    method.getAnnotation(Route.File::class.java).path
-                else
-                    method.getAnnotation(Route.Directory::class.java).path
+                method.getAnnotation(Route.File::class.java).path
             }
         }
 

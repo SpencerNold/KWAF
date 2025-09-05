@@ -6,7 +6,7 @@ import com.google.gson.JsonObject
 import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
 
-open class HttpResponse(val code: Int, val body: ByteArray) {
+open class HttpResponse(val code: Int, val headers: Map<String, String> = mapOf(), val body: ByteArray) {
 
     private val gson: Gson = GsonBuilder().create()
 

@@ -44,7 +44,10 @@ class HttpClient {
         } else {
             InputStreams.readAllBytes(connection.inputStream)
         }
-        return HttpResponse(code, body)
+        val headers = mutableMapOf<String, String>()
+        for (entry in connection.headerFields)
+            headers[entry.key] = entry.value.joinToString("; ")
+        return HttpResponse(code, headers, body)
     }
 
     private fun getJoinedParameters(parameters: Map<String, String>): String {

@@ -9,11 +9,7 @@ annotation class Route(val method: me.spencernold.kwaf.Http.Method, val path: St
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.FUNCTION)
-    annotation class File(val path: String)
-
-    @Retention(AnnotationRetention.RUNTIME)
-    @Target(AnnotationTarget.FUNCTION)
-    annotation class Directory(val path: String)
+    annotation class File(val path: String, val immutable: Boolean = true)
 
     enum class Encoding(private val encoder: Class<out Encoder>?) {
 

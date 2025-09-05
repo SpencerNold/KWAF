@@ -47,11 +47,12 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
                 exchange.sendResponseHeaders(204, -1)
                 exchange.responseBody.close()
                 return
-            }
-            if (response is HttpResponse) {
+            } else if (response is HttpResponse) {
                 val bytes = response.body
+                for (entry in response.headers)
+                    exchange.responseHeaders.set(entry.key, entry.value)
                 exchange.sendResponseHeaders(response.code, if (bytes.isEmpty() && response.code == 204) -1 else bytes.size.toLong())
-                if (bytes.isNotEmpty()) {
+                if (bytes.isNotEmpty() ) {
                     exchange.responseBody.write(bytes)
                     exchange.responseBody.flush()
                 }

@@ -35,8 +35,17 @@ class DynamicFileHttpHandler(private val instance: Any, private val method: Meth
                 logger.error("${method.name} in ${instance.javaClass.name} returns a null page when it shouldn't")
             }
             val bytes = if (response is InputStream) InputStreams.readAllBytes(response) else { if (response is File) Files.readAllBytes(response.toPath()) else ByteArray(0) }
-
-            val headers = createResponseHeaders(route)
+            if (exchange.requestHeaders.containsKey("If-None-Match")) {
+                val etag = exchange.requestHeaders.getFirst("If-None-Match")
+                if (etag == md5(bytes)) {
+                    exchange.responseHeaders.set("ETag", etag)
+                    exchange.responseHeaders.set("Cache-Control", route.cacheControl)
+                    exchange.sendResponseHeaders(304, -1)
+                    exchange.responseBody.close()
+                    return
+                }
+            }
+            val headers = createResponseHeaders(bytes, route)
             for (entry in headers)
                 exchange.responseHeaders.set(entry.key, entry.value)
             exchange.sendResponseHeaders(200, bytes.size.toLong())

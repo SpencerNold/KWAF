@@ -41,7 +41,17 @@ class StaticFileHttpHandler(private val bytes: ByteArray, private val route: Rou
 
     override fun handle(exchange: HttpExchange) {
         if (exchange.requestMethod == "GET") {
-            val headers = createResponseHeaders(route)
+            if (exchange.requestHeaders.containsKey("If-None-Match")) {
+                val etag = exchange.requestHeaders.getFirst("If-None-Match")
+                if (etag == md5(bytes)) {
+                    exchange.responseHeaders.set("ETag", etag)
+                    exchange.responseHeaders.set("Cache-Control", route.cacheControl)
+                    exchange.sendResponseHeaders(304, -1)
+                    exchange.responseBody.close()
+                    return
+                }
+            }
+            val headers = createResponseHeaders(bytes, route)
             for (entry in headers)
                 exchange.responseHeaders.set(entry.key, entry.value)
             exchange.sendResponseHeaders(200, bytes.size.toLong())

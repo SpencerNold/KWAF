@@ -6,6 +6,7 @@ import me.spencernold.kwaf.impl.HttpsWebServerImpl
 import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.services.ControllerService
 import me.spencernold.kwaf.services.DatabaseService
+import me.spencernold.kwaf.services.FirewallService
 import me.spencernold.kwaf.services.Service
 import me.spencernold.kwaf.services.sitemap.MapGeneratorTool
 import java.util.concurrent.ExecutorService
@@ -118,6 +119,10 @@ abstract class WebServer(val port: Int) {
                 } else if (clazz.isAnnotationPresent(Service.Database::class.java)) {
                     val database = clazz.getAnnotation(Service.Database::class.java)
                     val service = DatabaseService(clazz, database)
+                    service.start(server)
+                } else if (clazz.isAnnotationPresent(Service.Firewall::class.java)) {
+                    val firewall = clazz.getAnnotation(Service.Firewall::class.java)
+                    val service = FirewallService(clazz, firewall)
                     service.start(server)
                 } else {
                     logger.error("${clazz.name} must have a service annotation to be used as one")

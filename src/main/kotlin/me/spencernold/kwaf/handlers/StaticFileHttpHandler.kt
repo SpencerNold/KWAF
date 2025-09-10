@@ -3,6 +3,7 @@ package me.spencernold.kwaf.handlers
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import me.spencernold.kwaf.Route
+import me.spencernold.kwaf.firewall.Proxy
 import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.util.InputStreams
 import java.io.File
@@ -40,6 +41,30 @@ class StaticFileHttpHandler(private val bytes: ByteArray, private val route: Rou
     }
 
     override fun handle(exchange: HttpExchange) {
+        val requestHeaders = mutableMapOf<String, String>()
+        for (entry in exchange.requestHeaders)
+            requestHeaders[entry.key] = entry.value.joinToString("; ")
+        val localAddress = exchange.localAddress
+        val remoteAddress = exchange.remoteAddress
+        val result = Proxy.hook(
+            Proxy.Context(
+                exchange.requestURI,
+                exchange.requestMethod,
+                requestHeaders,
+                localAddress.address.hostAddress,
+                localAddress.port,
+                remoteAddress.address.hostAddress,
+                remoteAddress.port
+            )
+        )
+        if (result == Proxy.Result.BLOCK) {
+            exchange.sendResponseHeaders(403, -1)
+            exchange.responseBody.close()
+            return
+        }
+        if (result == Proxy.Result.TARPIT) {
+            return
+        }
         if (exchange.requestMethod == "GET") {
             if (exchange.requestHeaders.containsKey("If-None-Match")) {
                 val etag = exchange.requestHeaders.getFirst("If-None-Match")

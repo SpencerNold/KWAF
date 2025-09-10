@@ -3,6 +3,7 @@ package me.spencernold.kwaf.handlers
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import me.spencernold.kwaf.Route
+import me.spencernold.kwaf.firewall.Proxy
 import me.spencernold.kwaf.logger.Logger
 import me.spencernold.kwaf.util.InputStreams
 import java.io.File
@@ -10,7 +11,8 @@ import java.io.InputStream
 import java.lang.reflect.Method
 import java.nio.file.Files
 
-class DynamicFileHttpHandler(private val instance: Any, private val method: Method, private val route: Route.File): FileHandler(), HttpHandler {
+class DynamicFileHttpHandler(private val instance: Any, private val method: Method, private val route: Route.File) :
+    FileHandler(), HttpHandler {
 
     companion object {
         private val logger = Logger.getSystemLogger()
@@ -29,12 +31,38 @@ class DynamicFileHttpHandler(private val instance: Any, private val method: Meth
     }
 
     override fun handle(exchange: HttpExchange) {
+        val requestHeaders = mutableMapOf<String, String>()
+        for (entry in exchange.requestHeaders)
+            requestHeaders[entry.key] = entry.value.joinToString("; ")
+        val localAddress = exchange.localAddress
+        val remoteAddress = exchange.remoteAddress
+        val result = Proxy.hook(
+            Proxy.Context(
+                exchange.requestURI,
+                exchange.requestMethod,
+                requestHeaders,
+                localAddress.address.hostAddress,
+                localAddress.port,
+                remoteAddress.address.hostAddress,
+                remoteAddress.port
+            )
+        )
+        if (result == Proxy.Result.BLOCK) {
+            exchange.sendResponseHeaders(403, -1)
+            exchange.responseBody.close()
+            return
+        }
+        if (result == Proxy.Result.TARPIT) {
+            return
+        }
         if (exchange.requestMethod == "GET") {
             val response = method.invoke(instance)
             if (response == null) {
                 logger.error("${method.name} in ${instance.javaClass.name} returns a null page when it shouldn't")
             }
-            val bytes = if (response is InputStream) InputStreams.readAllBytes(response) else { if (response is File) Files.readAllBytes(response.toPath()) else ByteArray(0) }
+            val bytes = if (response is InputStream) InputStreams.readAllBytes(response) else {
+                if (response is File) Files.readAllBytes(response.toPath()) else ByteArray(0)
+            }
             if (exchange.requestHeaders.containsKey("If-None-Match")) {
                 val etag = exchange.requestHeaders.getFirst("If-None-Match")
                 if (etag == md5(bytes)) {

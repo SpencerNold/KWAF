@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import me.spencernold.kwaf.Route
 import me.spencernold.kwaf.exceptions.HandlerException
+import me.spencernold.kwaf.firewall.Proxy
 import me.spencernold.kwaf.http.HttpRequest
 import me.spencernold.kwaf.http.HttpResponse
 import me.spencernold.kwaf.util.InputStreams
@@ -12,11 +13,36 @@ import java.lang.reflect.Method
 class GenericHttpHandler(private val route: Route, private val instance: Any, private val method: Method): Handler(), HttpHandler {
 
     override fun handle(exchange: HttpExchange) {
+        val requestHeaders = mutableMapOf<String, String>()
+        for (entry in exchange.requestHeaders)
+            requestHeaders[entry.key] = entry.value.joinToString("; ")
+        val localAddress = exchange.localAddress
+        val remoteAddress = exchange.remoteAddress
+        val result = Proxy.hook(
+            Proxy.Context(
+                exchange.requestURI,
+                exchange.requestMethod,
+                requestHeaders,
+                localAddress.address.hostAddress,
+                localAddress.port,
+                remoteAddress.address.hostAddress,
+                remoteAddress.port
+            )
+        )
+        if (result == Proxy.Result.BLOCK) {
+            exchange.sendResponseHeaders(403, -1)
+            exchange.responseBody.close()
+            return
+        }
+        if (result == Proxy.Result.TARPIT) {
+            return
+        }
         if (exchange.requestMethod == route.method.name) {
             // Request Handling
             val body = InputStreams.readAllBytes(exchange.requestBody)
             if (body.isEmpty() == route.input) {
                 exchange.sendResponseHeaders(400, -1)
+                exchange.responseBody.close()
                 return
             }
             val encoder = route.encoding.getEncoder()
@@ -24,15 +50,20 @@ class GenericHttpHandler(private val route: Route, private val instance: Any, pr
             if (method.parameters.size == 1 && method.parameters[0].type == HttpRequest::class.java) {
                 val uri = exchange.requestURI
                 val parameters = mutableMapOf<String, String>()
-                val values = uri.query.split("&")
-                for (s in values) {
-                    val pair = s.split("=")
-                    parameters[pair[0]] = pair[1]
+                if (uri.query != null) {
+                    val values = uri.query.split("&")
+                    for (s in values) {
+                        if (s.contains("=")) {
+                            val pair = s.split("=")
+                            parameters[pair[0]] = pair[1]
+                        } else {
+                            exchange.sendResponseHeaders(400, -1)
+                            exchange.responseBody.close()
+                            return
+                        }
+                    }
                 }
-                val headers = mutableMapOf<String, String>()
-                for (key in exchange.requestHeaders.keys)
-                    headers[key] = exchange.requestHeaders.getValue(key)[0]
-                val request = HttpRequest(route.method, uri.path, parameters, headers, body)
+                val request = HttpRequest(route.method, uri.path, parameters, requestHeaders, body)
                 response = method.invoke(instance, request)
             } else if (route.input && method.parameters.size == 1) {
                 val request = encoder?.decode(String(body), method.parameters[0].type) ?: String(body)

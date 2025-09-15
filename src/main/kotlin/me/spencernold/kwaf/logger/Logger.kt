@@ -3,8 +3,15 @@ package me.spencernold.kwaf.logger
 abstract class Logger {
 
     companion object {
+
+        private var systemLogger: Logger = SystemLogger()
+
         fun getSystemLogger(): Logger {
-            return SystemLogger()
+            return systemLogger
+        }
+
+        fun setSystemLogger(logger: Logger) {
+            systemLogger = logger
         }
     }
 

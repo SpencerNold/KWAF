@@ -1,7 +1,6 @@
 package me.spencernold.kwaf.services
 
 import me.spencernold.kwaf.WebServer
-import me.spencernold.kwaf.database.Driver
 import me.spencernold.kwaf.firewall.Proxy
 import me.spencernold.kwaf.logger.Logger
 
@@ -29,7 +28,7 @@ abstract class Service(protected val type: Type, protected val clazz: Class<*>) 
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.CLASS)
-    annotation class Database(val driver: Driver.Type, val url: String, val permission: String = "", val username: String = "", val password: String = "")
+    annotation class Database(val url: String)
 
     @Retention(AnnotationRetention.RUNTIME)
     @Target(AnnotationTarget.CLASS)

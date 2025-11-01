@@ -3,12 +3,12 @@ package me.spencernold.kwaf.translator
 import me.spencernold.kwaf.logger.Logger
 import java.util.regex.Pattern
 
-class SystemPropertyTranslator: Translator<String, String?> {
+class SystemPropertyTranslator: Translator<String, String> {
 
     private val logger = Logger.getSystemLogger()
     private val pattern = Pattern.compile("SYS_PROP\\{(.+)}")
 
-    override fun translate(input: String): String? {
+    override fun translate(input: String): String {
         val matcher = pattern.matcher(input)
         if (!matcher.matches())
             return input

@@ -12,7 +12,7 @@ class DatabaseService(clazz: Class<*>, private val database: Database): Service(
         val url = translator.translate(database.url)
         val username = translator.translate(database.username) ?: ""
         val password = translator.translate(database.password) ?: ""
-        if (url == null || url == "") {
+        if (url == "") {
             logger.error("unable to connect to database: invalid url")
             return null
         }

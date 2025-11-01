@@ -11,7 +11,7 @@ abstract class Driver(protected val url: String, protected val username: String,
             return when (type) {
                 Type.SQLITE -> SQLiteDriver(url, username, password)
             }
-            throw NotImplementedError("Database Support does not exist yet!")
+            //throw NotImplementedError("Database Support does not exist yet!")
         }
     }
 

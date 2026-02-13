@@ -9,6 +9,7 @@ annotation class Route(
     val method: me.spencernold.kwaf.Http.Method,
     val path: String,
     val input: Boolean = false,
+    val contentType: ContentType = ContentType.NONE,
     val encoding: Encoding = Encoding.JSON
 ) {
 

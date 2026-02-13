@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-	api("com.google.code.gson:gson:2.13.1")
+	api("com.google.code.gson:gson:2.13.2")
 
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
@@ -45,7 +45,7 @@ tasks.test {
 
 tasks.register<JavaExec>("runExample") {
 	classpath = sourceSets["examples"].runtimeClasspath
-	mainClass.set("FirewallExampleKt") // <- change to the entrypoint of the example you want to run
+	mainClass.set("ComplexControllerExampleKt") // <- change to the entrypoint of the example you want to run
 }
 
 tasks.named<Copy>("processExamplesResources") {

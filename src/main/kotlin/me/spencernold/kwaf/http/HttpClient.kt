@@ -26,10 +26,10 @@ class HttpClient {
     }
 
     fun sendRequest(request: HttpRequest): HttpResponse {
-        val link = "${request.url}?${getJoinedParameters(request.headers)}"
+        val link = request.url + if (request.headers.isNotEmpty()) ("?${getJoinedParameters(request.parameters)}") else ""
         val connection = URL(link).openConnection() as HttpURLConnection
         connection.requestMethod = request.method.name
-        for ((key, value) in request.parameters)
+        for ((key, value) in request.headers)
             connection.setRequestProperty(key, value)
         if (request.body.isNotEmpty()) {
             connection.doOutput = true

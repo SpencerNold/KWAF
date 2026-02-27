@@ -42,7 +42,7 @@ class HttpClient {
         val body = if (code == 204 || connection.contentLength == 0) {
             ByteArray(0)
         } else {
-            InputStreams.readAllBytes(connection.inputStream)
+            InputStreams.readAllBytes(if (code >= 400) connection.errorStream else connection.inputStream)
         }
         val headers = mutableMapOf<String, String>()
         for (entry in connection.headerFields) {

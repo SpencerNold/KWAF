@@ -45,8 +45,10 @@ class HttpClient {
             InputStreams.readAllBytes(connection.inputStream)
         }
         val headers = mutableMapOf<String, String>()
-        for (entry in connection.headerFields)
-            headers[entry.key] = entry.value.joinToString("; ")
+        for (entry in connection.headerFields) {
+            if (entry.key != null && entry.value != null)
+                headers[entry.key] = entry.value.joinToString("; ")
+        }
         return HttpResponse(code, headers, body)
     }
 

@@ -30,6 +30,11 @@ abstract class WebServer(val port: Int) {
     abstract fun reload()
 
     /**
+     * Checks to see if the internal http server is running and has fully initialized
+     */
+    abstract fun running(): Boolean
+
+    /**
      * Registers a handler to the web server.
      *
      * @param path the path, appended to the website url to serve a handler

@@ -20,9 +20,9 @@ abstract class HttpxWebServer(port: Int, private val executor: ExecutorService, 
     override fun start() {
         if (running)
             return
-        running = true
         logger.info("Starting server on port: $port")
         server.executor = executor
+        running = true
         server.start()
     }
 
@@ -32,6 +32,10 @@ abstract class HttpxWebServer(port: Int, private val executor: ExecutorService, 
         running = false
         logger.info("Shutting down server...")
         server.stop(0)
+    }
+
+    override fun running(): Boolean {
+        return running
     }
 
     override fun addHandler(path: String, handler: Handler) {
